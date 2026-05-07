@@ -1,0 +1,139 @@
+
+ python app
+
+  + python ssr
+  + flask
+  + jinja
+  + hmlr wtf 
+  + opeanApi spec?
+
+  + pytest
+
+  + jenkins?
+  + aws 
+
+
+-----------------------------------------------
+
+CONFIRMED HMLR / TPXimpact STACK NOTES
+
+Reply from TPXimpact confirmed the likely project stack:
+
+  Links to the front-end information:
+    https://github.com/LandRegistry/govuk-frontend-jinja
+    https://github.com/LandRegistry/govuk-frontend-flask
+    https://github.com/LandRegistry/govuk-frontend-wtf
+
+- Backend: Java Spring Boot
+- Java version: upgrading toward Java 25
+- Spring Boot: upgrading toward Spring Boot 4
+- Python SSR: yes, using Flask
+- Frontend: Flask/Jinja SSR with HMLR/Land Registry custom components
+- Public frontend libraries:
+  - govuk-frontend-jinja
+  - govuk-frontend-flask
+  - govuk-frontend-wtf
+- Database: mostly PostgreSQL
+- Data access: raw SQL via JDBC on their team
+- API style: REST APIs + OpenAPI
+- CI/CD: Jenkins integrated with self-hosted GitLab
+- Cloud/platform: AWS + OpenShift
+- Testing: pytest + JUnit
+- QA automation: Ruby, but likely not needed directly
+
+Project adjustment:
+This mini-project should now prioritise Flask SSR + Jinja + Land Registry/GOV.UK frontend components, Java Spring Boot REST/OpenAPI, PostgreSQL/PostGIS, raw SQL/JDBC-style backend thinking, pytest/JUnit, and Jenkins/GitLab-style pipeline awareness.
+
+Still keep:
+- Terraform/AWS deploy/destroy practice
+- GeoServer/PostGIS layer publishing
+- status/retry/idempotency/reconciliation patterns
+- Python geospatial processing
+
+
+--------------------------------------------------
+
+PROJECT AIM: Geospatial API Ingestion + GeoServer Publisher
+
+Build a production-style mini onboarding project that prepares me for HMLR/TPXimpact while also advancing my long-term Tropical Rainforest Scientific Research System.
+
+In simple terms:
+A Python SSR admin app fetches geospatial/environmental data from APIs, processes it, stores/publishes it through PostGIS/GeoServer, and records layer metadata/status through a Java Spring Boot API so my Angular/OpenLayers map can display only valid published layers.
+
+Core architecture:
+- Python Flask/Jinja SSR app = admin UI + geospatial processing/orchestration
+- Java Spring Boot API = business API + layer catalogue/status owner
+- PostgreSQL/PostGIS = geospatial data store
+- GeoServer = serves published WMS/WFS/raster/vector layers
+- Angular/OpenLayers/WebGL Earth = displays published layers
+- RabbitMQ + second Java service = optional async/message pattern practice
+- Terraform/AWS = deploy/destroy infrastructure for cloud/IaC practice
+- CloudWatch/logging = lightweight observability
+
+Main user flow:
+1. Enter/select rainforest location, GPS point, bounding box, or region.
+2. Choose data source, e.g. rainfall, satellite weather, fire hotspot, forest loss, species data.
+3. Click “Import latest data”.
+4. Python fetches data from external API.
+5. Python processes/clips/reprojects/styles data for the selected area.
+6. Data is saved to PostGIS or prepared as GeoTIFF/vector layer.
+7. Python publishes/updates the layer in GeoServer.
+8. Python/Java records catalogue metadata and status.
+9. Angular/OpenLayers reads published layer metadata from Java API.
+10. Map displays only valid PUBLISHED layers.
+
+Layer catalogue metadata:
+- title
+- area / region / bounding box
+- source API
+- generated date/time
+- processing settings
+- GeoServer workspace/layer name
+- layer type: WMS/WFS/raster/vector
+- status: PENDING, PROCESSING, PUBLISHED, FAILED, NEEDS_RECONCILIATION
+- correlation ID
+- error message if failed
+
+Production-style patterns to practise:
+- Status workflow: PENDING → PROCESSING → PUBLISHED / FAILED
+- Retry around GeoServer/API calls
+- Idempotency key so repeated imports do not create duplicates
+- Reconciliation button/job to check Java catalogue vs GeoServer reality
+- Correlation ID across Python, Java, RabbitMQ, GeoServer logs
+- Transactional outbox if Java needs to save DB update + send RabbitMQ event
+- Idempotent RabbitMQ consumer if async processing is added
+- Compensating actions, e.g. cleanup temporary PostGIS/GeoServer layer if publish fails
+- Angular only reads from Java API catalogue, not random GeoServer internals
+
+Best first version:
+- Python Flask SSR app
+- One “Import latest data” button
+- One external API/data source
+- One region/bounding box input
+- Process to GeoJSON/PostGIS
+- Publish one GeoServer layer
+- Save catalogue record through Java API
+- Angular/OpenLayers can display the new published layer
+- Add status, retry, idempotency key, correlation ID, and reconciliation button
+
+Terraform/AWS aim:
+- Deploy Python app in a production-like way
+- Add IAM/security groups/CloudWatch logs as needed
+- Use terraform apply to create it
+- Use terraform destroy to remove it and avoid ongoing cost
+
+Why this is valuable:
+- Good HMLR-style preparation: Java, Python, geospatial data, public-sector style stack
+- Supports my real rainforest research system
+- Builds future-proof skills: cloud, Terraform, secure microservices, PostGIS, GeoServer, GIS pipelines
+- More valuable than a generic CRUD app
+- Does not need to cover everything; it already covers a strong senior-relevant production set
+
+Not required for first version:
+- Kubernetes
+- full enterprise auth/OIDC
+- complex state machine framework
+- large-scale traffic
+- full observability/tracing stack
+- perfect production security
+- multiple APIs/data sources from day one

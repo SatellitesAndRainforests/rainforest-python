@@ -1,0 +1,89 @@
+
+ terraform fmt -recursive
+
+
+ - - key terraform types
+
+terraform {}    # Terraform/provider version config
+provider {}        # AWS region/auth/provider setup
+data {}                 # read existing info from AWS, e.g. account ID
+locals {}              # reusable internal values
+resource {}      # create/manage real AWS things
+output {}           # print values after apply
+variable {}         # input values, usually from tfvars/env/CLI
+
+terraform fmt        # local formatting
+terraform init       # downloads provider / sets up Terraform
+terraform validate   # checks syntax/config
+terraform plan       # checks AWS + shows what it will create
+terraform apply      # creates real AWS resources
+terraform destroy    # deletes them
+
+
+ - - aws syntax
+
+resource    "aws_resource_type"    "our_local_name_to_reference_it"     {
+    settings = "values"
+}
+
+ - - reference later
+
+ aws_resource_type. our_local_name_to_reference_it . id
+
+ - - tags are additional meta-data / labels to id them later in ui's / cli's
+
+
+ - - minimial 80% core
+
+provider import
+backend/state
+variables/locals  # reuse name/settings
+data              # get from account, (vpc, ami, ...)
+
+ - - core aws resources
+
+ - - core AWS resources 80/20
+
+aws_vpc                    # main AWS network; typically 1 per env, often reused not re-created.
+aws_subnet                 # network sections, inside VPC; usually 2+ across availability zones
+aws_security_group         # firewall rules for components (ec2, ecs, rds ... ) 
+aws_iam_role               # identity aws services assume (ec2, ecs, ... )
+aws_iam_policy             # permission rules attached to roles/ users
+users' iam                 # roles for users
+aws_s3_bucket              # object/file storage area
+aws_dynamodb_table         # NoSQL table; including Terraform state (locking)
+aws_ecr_repository         # Docker image storage
+aws_instance               # EC2 vm
+aws_ecs_cluster            # (~k8, ~eks) aws container platform/environment
+aws_ecs_service            # (~k8, ~eks) runs containers in the cluster
+aws_cloudwatch_log_group   # logs for apps/services
+aws_ssm_parameter          # configuration location: API URLs ..., SecretsManager for secrets
+aws_db_instance            # RDS managed database, e.g. Postgres/MySQL
+
+ - - useful grouping
+
+Network:      VPC, subnet, security group
+Permissions:  IAM role + IAM policy
+Compute:      EC2 or ECS
+Containers:   ECR
+Logs:         CloudWatch
+Config:       SSM Parameter
+Storage:      S3
+Database:     RDS
+State:        S3 + DynamoDB
+
+ - - 
+
+depends_on    # terraform order, resources before resource settings
+backend {}    # where state is stored after bootstrap
+terraform.tfstate                   # Terraform’s memory of what it created
+modules                             # reusable Terraform folders/components
+lifecycle                           # rules like prevent_destroy / create_before_destroy
+count / for_each                    # create many similar resources
+terraform import                    # bring existing AWS resources under Terraform
+.tfvars                             # environment/project input values
+
+
+
+
+
