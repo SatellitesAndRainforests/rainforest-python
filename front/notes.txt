@@ -1,6 +1,12 @@
 
+1  source .venv/bin/activate
+2  pytest
+
+tree | wl-copy
+
 python3 -m venv .venv
 source .venv/bin/activate
+deactivate
 
 # list + save everything installed in this venv + safe it to requirments.txt
 # can later be re-created in Dcoker with:   pip install -r requirements.txt

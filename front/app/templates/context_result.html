@@ -1,0 +1,28 @@
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+
+<!doctype html>
+<html lang="en">
+  <body>
+    <main class="govuk-main-wrapper">
+      <h1 class="govuk-heading-l">Context request received</h1>
+
+      <p class="govuk-body">Latitude: {{ context_request.latitude }}</p>
+      <p class="govuk-body">Longitude: {{ context_request.longitude }}</p>
+
+      {% if context_request.nasa_preview_url %}
+
+        <h2 class="govuk-heading-m">NASA satellite preview</h2>
+
+        <img
+          src="{{ context_request.nasa_preview_url }}"
+          alt="NASA GIBS satellite preview selected location"
+          style="max-width: 100%; height: auto;"
+        >
+
+      {% endif %}
+
+      <a class="govuk-link" href="/context/new">Submit another location</a>
+
+    </main>
+  </body>
+</html>

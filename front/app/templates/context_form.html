@@ -1,0 +1,21 @@
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+
+<!doctype html>
+<html lang="en">
+  <body>
+    <main class="govuk-main-wrapper">
+      <h1 class="govuk-heading-l">Request location context</h1>
+
+      <form method="post">
+        {{ form.hidden_tag() }}
+
+        {{ form.latitude }}
+        {{ form.longitude }}
+
+        {{ govukButton({
+          "text": "Get contextual data"
+        }) }}
+      </form>
+    </main>
+  </body>
+</html>

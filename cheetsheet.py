@@ -1248,38 +1248,26 @@ for item in items:
 for key, value in data.items():
     print(key, value)
 
-# f-string
-message = f"User {name} is {age}"
+
+# here
+
+message = f"the user's {name} is {age}"
+
 
 # list comprehension
 names = [user.name for user in users]
 
-# None check
+
 if value is None:
-    ...
 
-# main guard
-if __name__ == "__main__":
-    main()
 
-# exception
 try:
     ...
 except ValueError as e:
     ...
 
-# type hint
-def get_user(user_id: int) -> str | None:
-    ...
-```
 
----
-
-# 40. Tiny Java-style service example in Python
-
-```python
 from dataclasses import dataclass
-
 
 @dataclass
 class User:
@@ -1319,11 +1307,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-```
 
-This is the kind of Python structure that will feel familiar from Java service/repository work.
-
----
 
 # 41. What I may have missed / worth checking later
 
