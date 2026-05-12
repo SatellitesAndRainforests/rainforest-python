@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <body>
+    <main class="govuk-main-wrapper">
+
+      <h1 class="govuk-heading-l">Context package requested</h1>
+
+      <p class="govuk-body">Status: {{ context_import.status }}</p>
+      <p class="govuk-body">Latitude: {{ context_import.latitude }}</p>
+      <p class="govuk-body">Longitude: {{ context_import.longitude }}</p>
+      <p class="govuk-body">Layer: {{ context_import.layer }}</p>
+      <p class="govuk-body">Date: {{ context_import.image_date }}</p>
+      <p class="govuk-body">BBOX: {{ context_import.bbox }}</p>
+
+      <p class="govuk-body">Correlation ID: {{ context_import.correlation_id }}</p>
+      <p class="govuk-body">Idempotency key: {{ context_import.idempotency_key }}</p>
+
+      <p class="govuk-body">
+        <a class="govuk-link" href="{{ context_import.production_url }}" target="_blank">
+          Open production NASA image
+        </a>
+      </p>
+
+      <p class="govuk-body">
+        Later this step will create a Java catalogue record, publish to GeoServer,
+        and update the status to PUBLISHED or FAILED.
+      </p>
+
+      <a class="govuk-link" href="/context/new">preview another location</a>
+
+    </main>
+  </body>
+</html>

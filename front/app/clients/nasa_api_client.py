@@ -2,6 +2,10 @@ from datetime import date, timedelta
 from urllib.parse import urlencode
 
 
+def get_default_image_date() -> str:
+    return (date.today() - timedelta(days=1)).isoformat()
+
+
 def build_box(latitude: float, longitude: float, half_degree: float = 10.0) -> str:
     min_lon = max(longitude - half_degree, -180)
     max_lon = min(longitude + half_degree, 180)
@@ -17,10 +21,13 @@ def build_nasa_gibs_preview_url(
     endpoint: str,
     layer: str,
     image_date: str | None = None,
+    width: int = 300,
+    height: int = 300,
+    half_degree: float = 10.0
 ) -> str:
 
     if image_date is None:
-        image_date = (date.today() - timedelta(days=1)).isoformat()
+        image_date = get_default_image_date()
 
     params = {
         "SERVICE": "WMS",
@@ -31,9 +38,10 @@ def build_nasa_gibs_preview_url(
         "FORMAT": "image/jpeg",
         "SRS": "EPSG:4326",
         "BBOX": build_box(latitude, longitude),
-        "WIDTH": 300, # 2048 for scientific 
-        "HEIGHT": 300, # 1048 or which is 2km per pixel
+        "WIDTH": width, # 2048 for scientific 
+        "HEIGHT": height, # 1048 or which is 2km per pixel, 300 is preview
         "TIME": image_date,
     }
 
     return f"{endpoint}?{urlencode(params)}"
+

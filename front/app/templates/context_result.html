@@ -4,6 +4,9 @@
 <html lang="en">
   <body>
     <main class="govuk-main-wrapper">
+
+      <a class="govuk-link" href="/context/new">preview a diffrent location</a>
+
       <h1 class="govuk-heading-l">Context request received</h1>
 
       <p class="govuk-body">Latitude: {{ context_request.latitude }}</p>
@@ -19,9 +22,20 @@
           style="max-width: 100%; height: auto;"
         >
 
+        <form method="post" action="{{ url_for('context.import_context') }}">
+          <input type="hidden" name="latitude" value="{{ context_request.latitude }}">
+          <input type="hidden" name="longitude" value="{{ context_request.longitude}}">
+          <input type="hidden" name="layer" value="{{ context_request.layer }}"> 
+          <input type="hidden" name="image_date" value="{{ context_request.image_date }}"> 
+
+          {{ govukButton({
+            "text": "Confirm + create/save context package"
+          }) }}
+
+        </form>
+
       {% endif %}
 
-      <a class="govuk-link" href="/context/new">Submit another location</a>
 
     </main>
   </body>

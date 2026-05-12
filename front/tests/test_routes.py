@@ -39,3 +39,20 @@ def test_context_from_invalid_latitude(client):
 
     assert response.status_code == 200
     assert b"Request location context" in response.data
+
+
+def test_context_import_valid_post(client):
+
+    response = client.post("/context/import", data={
+        "latitude": "50.0",
+        "longitude": "0.0",
+        "layer": "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+        "image_date": "2026-05-10",
+    })
+
+    assert response.status_code == 200
+    assert b"Context package requested" in response.data
+    assert b"PENDING" in response.data
+    assert b"VIIRS_SNPP_CorrectedReflectance_TrueColor" in response.data
+
+
