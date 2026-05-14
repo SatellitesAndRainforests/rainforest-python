@@ -1145,69 +1145,75 @@ Python uses indentation instead of `{}`.
 value = None
 ```
 
+# here
+
+
 ## 4. `True` / `False`, not `true` / `false`
 
-```python
 active = True
-```
+
+
 
 ## 5. `and`, `or`, `not`, not `&&`, `||`, `!`
 
-```python
+
 if active and age > 18:
-    ...
-```
+    if True and !False or True:
+
 
 ## 6. Lists are flexible
 
-```python
 items = [1, "hello", True]
-```
 
-Allowed, though not always good style.
+
+## 
+
+my_list = []
+my_set = set()
+my_dict = {}
+
+my_list = [1,2,3]
+my_set = {1,2,3}
+my_dict = {
+        "name":"mark",
+        "name": "Jessica"
+        }
 
 ## 7. Mutable default arguments are dangerous
 
 Avoid this:
 
-```python
 def add_item(item, items=[]):
     items.append(item)
     return items
-```
 
 Use this:
 
-```python
 def add_item(item, items=None):
     if items is None:
         items = []
     items.append(item)
     return items
-```
+
 
 ## 8. Integer division
 
-```python
 5 / 2   # 2.5
 5 // 2  # 2
-```
+
+
 
 ## 9. No method overloading in the Java sense
 
 This does not work like Java:
 
-```python
 def add(a):
-    ...
-
 def add(a, b):
-    ...
-```
 
 The second one replaces the first.
 
----
+
+
 
 # 38. Java → Python quick mapping
 
@@ -1233,23 +1239,23 @@ The second one replaces the first.
 | Jackson JSON           | `json` module / Pydantic                  |
 | POJO/record            | dataclass / Pydantic model                |
 
----
+
+
+
 
 # 39. Most important Python fluency patterns
 
 Learn these first:
 
-```python
 # for-in loop
 for item in items:
     print(item)
+
 
 # dict loop
 for key, value in data.items():
     print(key, value)
 
-
-# here
 
 message = f"the user's {name} is {age}"
 

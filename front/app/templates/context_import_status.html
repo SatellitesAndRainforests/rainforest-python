@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
   <body>
+
     <main class="govuk-main-wrapper">
 
       <h1 class="govuk-heading-l">Context package requested</h1>
@@ -21,13 +22,16 @@
         </a>
       </p>
 
-      <p class="govuk-body">
-        Later this step will create a Java catalogue record, publish to GeoServer,
-        and update the status to PUBLISHED or FAILED.
-      </p>
+      <h2 class="govuk-heading-m">Java catalogue response</h2>
+
+      <p class="govuk-body">Java status: {{ java_response.status }}</p>
+      <p class="govuk-body">Context package ID: {{ java_response.contextPackageId }}</p>
+      <p class="govuk-body">Java correlation ID: {{ java_response.correlationId }}</p>
+      <p class="govuk-body">Java idempotency key: {{ java_response.idempotencyKey }}</p>
 
       <a class="govuk-link" href="/context/new">preview another location</a>
 
     </main>
+
   </body>
 </html>

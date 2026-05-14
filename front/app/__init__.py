@@ -57,7 +57,7 @@ app.config["NASA_GIBS_DEFAULT_LAYER"] = "VIIRS_SNPP_CorrectedReflectance_TrueCol
 
 
 
-
+app.config["JAVA_CATALOGUE_BASE_URL"] = "http://localhost:8080"
 
 
 app.jinja_loader = ChoiceLoader([

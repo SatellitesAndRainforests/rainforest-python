@@ -1,10 +1,9 @@
-from flask import Blueprint, render_template, request
-
+from flask import Blueprint, current_app,  render_template, request
+from app.clients.java_api_client import create_context_package
 from app.forms.context_forms import LocationContextForm
-from app.services.context_service import (
-    build_context_import_request,
-    build_context_request
-)
+from app.services.context_service import ( build_context_import_request, build_context_request )
+
+
 
 context_bp = Blueprint("context", __name__, url_prefix="/context")
 
@@ -38,9 +37,15 @@ def import_context():
         image_date = request.form["image_date"],
     )
 
+    java_response = create_context_package(
+        base_url=current_app.config["JAVA_CATALOGUE_BASE_URL"],
+        payload=context_import["java_payload"],
+    )
+
     return render_template(
             "context_import_status.html",
             context_import = context_import,
+            java_response = java_response
     )
 
 

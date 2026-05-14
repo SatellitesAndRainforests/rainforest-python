@@ -40,8 +40,7 @@ def build_context_import_request(
         latitude: float,
         longitude: float,
         layer: str,
-        image_date: str,
-) -> dict:
+        image_date: str ) -> dict:
 
     bbox = build_box(
         latitude,
@@ -74,6 +73,20 @@ def build_context_import_request(
         "correlation_id": correlation_id,
         "idempotency_key": idempotency_key,
         "production_url": production_url,
+
+        # Java OpenAPI request payload
+        "java_payload": {
+            "latitude": latitude,
+            "longitude": longitude,
+            "bbox": bbox,
+            "layer": layer,
+            "imageDate": image_date,
+            "source": "NASA_GIBS",
+            "idempotencyKey": idempotency_key,
+            "correlationId": correlation_id,
+            "productionUrl": production_url,
+        }
+
     }
 
 

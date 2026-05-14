@@ -1,0 +1,160 @@
+openapi: 3.0.3
+
+info:
+  title: Rainforest Context Catalogue API
+  version: 0.1.0
+
+paths:
+  /context-packages:
+    post:
+      tags:
+        - context-packages
+      operationId: createContextPackage
+      summary: Create a context package metadata record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContextPackageRequest'
+      responses:
+        '201':
+          description: Context package created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContextPackageResponse'
+
+  /context-packages/{contextPackageId}:
+    get:
+      tags:
+        - context-packages
+      operationId: getContextPackage
+      summary: Get a context package
+      parameters:
+        - name: contextPackageId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Context package found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContextPackageResponse'
+
+  /context-packages/{contextPackageId}/status:
+    patch:
+      tags:
+        - context-packages
+      operationId: updateContextPackageStatus
+      summary: Update context package processing status
+      parameters:
+        - name: contextPackageId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateContextPackageStatusRequest'
+      responses:
+        '200':
+          description: Context package status updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContextPackageResponse'
+
+components:
+  schemas:
+    CreateContextPackageRequest:
+      type: object
+      required:
+        - latitude
+        - longitude
+        - bbox
+        - layer
+        - imageDate
+        - source
+        - idempotencyKey
+        - correlationId
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        bbox:
+          type: string
+        layer:
+          type: string
+        imageDate:
+          type: string
+          format: date
+        source:
+          type: string
+          example: NASA_GIBS
+        idempotencyKey:
+          type: string
+        correlationId:
+          type: string
+        productionUrl:
+          type: string
+
+    UpdateContextPackageStatusRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          $ref: '#/components/schemas/ContextPackageStatus'
+        errorMessage:
+          type: string
+          nullable: true
+        geoserverLayerName:
+          type: string
+          nullable: true
+        geoserverWmsUrl:
+          type: string
+          nullable: true
+
+    ContextPackageResponse:
+      type: object
+      required:
+        - contextPackageId
+        - status
+        - correlationId
+      properties:
+        contextPackageId:
+          type: string
+        status:
+          $ref: '#/components/schemas/ContextPackageStatus'
+        correlationId:
+          type: string
+        idempotencyKey:
+          type: string
+        geoserverLayerName:
+          type: string
+          nullable: true
+        geoserverWmsUrl:
+          type: string
+          nullable: true
+        errorMessage:
+          type: string
+          nullable: true
+
+    ContextPackageStatus:
+      type: string
+      enum:
+        - PENDING
+        - PROCESSING
+        - PUBLISHED
+        - FAILED
+        - NEEDS_RECONCILIATION
