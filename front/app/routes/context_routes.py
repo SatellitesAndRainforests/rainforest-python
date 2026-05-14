@@ -1,5 +1,7 @@
 from flask import Blueprint, current_app,  render_template, request
-from app.clients.java_api_client import create_context_package
+
+from app.clients.geoserver_client import check_geoserver_connection, publish_context_package_stub
+from app.clients.java_api_client import create_context_package, update_context_package_status
 from app.forms.context_forms import LocationContextForm
 from app.services.context_service import ( build_context_import_request, build_context_request )
 
@@ -42,10 +44,37 @@ def import_context():
         payload=context_import["java_payload"],
     )
 
+    publish_response = publish_context_package_stub(
+        workspace=current_app.config["GEOSERVER_WORKSPACE"],
+        context_package_id=java_response["contextPackageId"],
+        layer=context_import["layer"],
+    )
+
+    java_response = update_context_package_status(
+        base_url=current_app.config["JAVA_CATALOGUE_BASE_URL"],
+        context_package_id=java_response["contextPackageId"],
+        payload=publish_response,
+    )
+
     return render_template(
             "context_import_status.html",
             context_import = context_import,
             java_response = java_response
     )
+
+
+
+@context_bp.route("/geoserver/check")
+def check_geoserver():
+    result = check_geoserver_connection(
+        base_url=current_app.config["GEOSERVER_BASE_URL"],
+        username=current_app.config["GEOSERVER_USER"],
+        password=current_app.config["GEOSERVER_PASSWORD"],
+    )
+
+    return result
+
+
+
 
 

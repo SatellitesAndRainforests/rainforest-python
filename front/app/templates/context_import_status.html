@@ -6,7 +6,6 @@
 
       <h1 class="govuk-heading-l">Context package requested</h1>
 
-      <p class="govuk-body">Status: {{ context_import.status }}</p>
       <p class="govuk-body">Latitude: {{ context_import.latitude }}</p>
       <p class="govuk-body">Longitude: {{ context_import.longitude }}</p>
       <p class="govuk-body">Layer: {{ context_import.layer }}</p>
@@ -26,8 +25,6 @@
 
       <p class="govuk-body">Java status: {{ java_response.status }}</p>
       <p class="govuk-body">Context package ID: {{ java_response.contextPackageId }}</p>
-      <p class="govuk-body">Java correlation ID: {{ java_response.correlationId }}</p>
-      <p class="govuk-body">Java idempotency key: {{ java_response.idempotencyKey }}</p>
 
       <a class="govuk-link" href="/context/new">preview another location</a>
 

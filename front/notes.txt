@@ -4,6 +4,8 @@
 
 tree | wl-copy
 
+export GEOSERVER_PASSWORD='<pass-word>'
+
 python3 -m venv .venv
 source .venv/bin/activate
 deactivate

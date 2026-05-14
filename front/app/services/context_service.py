@@ -64,7 +64,6 @@ def build_context_import_request(
     )
 
     return {
-        "status": "PENDING",
         "latitude": latitude,
         "longitude": longitude,
         "layer": layer,

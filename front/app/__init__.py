@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from jinja2 import ChoiceLoader, PackageLoader, PrefixLoader
 
@@ -59,6 +61,12 @@ app.config["NASA_GIBS_DEFAULT_LAYER"] = "VIIRS_SNPP_CorrectedReflectance_TrueCol
 
 app.config["JAVA_CATALOGUE_BASE_URL"] = "http://localhost:8080"
 
+
+app.config["GEOSERVER_BASE_URL"] = "http://rainforest-research.freeddns.org/geoserver"
+app.config["GEOSERVER_USER"] = "admin"  # okay for local dev if you want
+app.config["GEOSERVER_WORKSPACE"] = "rainforest"
+
+app.config["GEOSERVER_PASSWORD"] = os.environ.get("GEOSERVER_PASSWORD", "")
 
 app.jinja_loader = ChoiceLoader([
     PackageLoader("app"),
