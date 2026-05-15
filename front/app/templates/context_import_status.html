@@ -1,34 +1,46 @@
 <!doctype html>
 <html lang="en">
-  <body>
+<body>
 
-    <main class="govuk-main-wrapper">
+<main class="govuk-main-wrapper">
 
-      <h1 class="govuk-heading-l">Context package requested</h1>
+  <h1 class="govuk-heading-l">Context package requested</h1>
 
-      <p class="govuk-body">Latitude: {{ context_import.latitude }}</p>
-      <p class="govuk-body">Longitude: {{ context_import.longitude }}</p>
-      <p class="govuk-body">Layer: {{ context_import.layer }}</p>
-      <p class="govuk-body">Date: {{ context_import.image_date }}</p>
-      <p class="govuk-body">BBOX: {{ context_import.bbox }}</p>
+  <p class="govuk-body">Latitude: {{ context_import.latitude }}</p>
+  <p class="govuk-body">Longitude: {{ context_import.longitude }}</p>
+  <p class="govuk-body">Layer: {{ context_import.layer }}</p>
+  <p class="govuk-body">Date: {{ context_import.image_date }}</p>
+  <p class="govuk-body">BBOX: {{ context_import.bbox }}</p>
 
-      <p class="govuk-body">Correlation ID: {{ context_import.correlation_id }}</p>
-      <p class="govuk-body">Idempotency key: {{ context_import.idempotency_key }}</p>
+  <p class="govuk-body">Correlation ID: {{ context_import.correlation_id }}</p>
+  <p class="govuk-body">Idempotency key: {{ context_import.idempotency_key }}</p>
 
-      <p class="govuk-body">
-        <a class="govuk-link" href="{{ context_import.production_url }}" target="_blank">
-          Open production NASA image
-        </a>
-      </p>
+  <p class="govuk-body">
+    <a class="govuk-link" href="{{ context_import.production_url }}" target="_blank">
+      Open production NASA image
+    </a>
+  </p>
 
-      <h2 class="govuk-heading-m">Java catalogue response</h2>
+  <h2 class="govuk-heading-m">Java catalogue response</h2>
 
-      <p class="govuk-body">Java status: {{ java_response.status }}</p>
-      <p class="govuk-body">Context package ID: {{ java_response.contextPackageId }}</p>
+  <p class="govuk-body">Java final status: {{ java_response.status }}</p>
+  <p class="govuk-body">Context package ID: {{ java_response.contextPackageId }}</p>
 
-      <a class="govuk-link" href="/context/new">preview another location</a>
+  {% if java_response.geoserverLayerName %}
+  <p class="govuk-body">GeoServer layer: {{ java_response.geoserverLayerName }}</p>
+  {% endif %}
 
-    </main>
+  {% if java_response.geoserverWmsUrl %}
+  <p class="govuk-body">GeoServer WMS URL: {{ java_response.geoserverWmsUrl }}</p>
+  {% endif %}
 
-  </body>
+  {% if java_response.errorMessage %}
+  <p class="govuk-body">Error: {{ java_response.errorMessage }}</p>
+  {% endif %}
+
+  <a class="govuk-link" href="/context/new">preview another location</a>
+
+</main>
+
+</body>
 </html>

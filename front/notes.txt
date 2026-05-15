@@ -19,4 +19,45 @@ flask run
 http://localhost:5000
 http://localhost:5000/health
 
+-----------------------------------------------------------
+
+wget -O nasa.jpg "PASTE_PRODUCTION_NASA_URL_HERE"
+
+gdal_translate \
+  -of GTiff \
+  -a_srs EPSG:4326 \
+  -a_ullr -10.0 60.0 10.0 40.0 \
+  nasa.jpg \
+  nasa_context_4326.tif
+
+gdalwarp \
+  -t_srs EPSG:3857 \
+  -of GTiff \
+  -co COMPRESS=DEFLATE \
+  -co TILED=YES \
+  -co BLOCKXSIZE=256 \
+  -co BLOCKYSIZE=256 \
+  nasa_context_4326.tif \
+  nasa_context_3857.tif
+
+gdalinfo nasa_context_3857.tif | head -120
+
+------------------------------------------
+
+curl -u admin:$GEOSERVER_PASSWORD \
+  -X PUT \
+  -H "Content-type: image/tiff" \
+  --data-binary @nasa_context_3857.tif \
+  "http://rainforest-research.freeddns.org/geoserver/rest/workspaces/rainforest/coveragestores/nasa_context_3857/file.geotiff?configure=first"
+
+------------------
+
+  `${geoserverTmsBaseUrl}/rainforest:nasa_context_3857@EPSG:900913@png/{z}/{x}/{y}.png`,
+
+------------
+
+
+
+
+
 

@@ -14,3 +14,10 @@ __pycache__/
 *.tfstate
 *.tfstate.*
 .terraform.lock.hcl
+
+generated/
+*.jpg
+*.jpeg
+*.tif
+*.tiff
+

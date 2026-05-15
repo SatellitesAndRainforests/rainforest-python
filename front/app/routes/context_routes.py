@@ -1,10 +1,13 @@
 from flask import Blueprint, current_app,  render_template, request
 
-from app.clients.geoserver_client import check_geoserver_connection, publish_context_package_stub
+from app.clients.geoserver_client import check_geoserver_connection, publish_context_package
 from app.clients.java_api_client import create_context_package, update_context_package_status
 from app.forms.context_forms import LocationContextForm
 from app.services.context_service import ( build_context_import_request, build_context_request )
-
+from app.services.gdal_service import (
+        convert_nasa_image_to_geotiff_for_geoserver, 
+        delete_generated_context_files
+)
 
 
 context_bp = Blueprint("context", __name__, url_prefix="/context")
@@ -33,10 +36,10 @@ def new_context():
 def import_context():
 
     context_import = build_context_import_request(
-        latitude = float(request.form["latitude"]),
-        longitude = float(request.form["longitude"]),
-        layer = request.form["layer"],
-        image_date = request.form["image_date"],
+        latitude=float(request.form["latitude"]),
+        longitude=float(request.form["longitude"]),
+        layer=request.form["layer"],
+        image_date=request.form["image_date"],
     )
 
     java_response = create_context_package(
@@ -44,24 +47,49 @@ def import_context():
         payload=context_import["java_payload"],
     )
 
-    publish_response = publish_context_package_stub(
-        workspace=current_app.config["GEOSERVER_WORKSPACE"],
-        context_package_id=java_response["contextPackageId"],
-        layer=context_import["layer"],
-    )
+    try:
+        geotiff_path = convert_nasa_image_to_geotiff_for_geoserver(
+            production_url=context_import["production_url"],
+            bbox=context_import["bbox"],
+            context_package_id=java_response["contextPackageId"],
+        )
 
-    java_response = update_context_package_status(
-        base_url=current_app.config["JAVA_CATALOGUE_BASE_URL"],
-        context_package_id=java_response["contextPackageId"],
-        payload=publish_response,
-    )
+        publish_response = publish_context_package(
+            base_url=current_app.config["GEOSERVER_BASE_URL"],
+            username=current_app.config["GEOSERVER_USER"],
+            password=current_app.config["GEOSERVER_PASSWORD"],
+            workspace=current_app.config["GEOSERVER_WORKSPACE"],
+            context_package_id=java_response["contextPackageId"],
+            geotiff_path=geotiff_path,
+        )
+
+        java_response = update_context_package_status(
+            base_url=current_app.config["JAVA_CATALOGUE_BASE_URL"],
+            context_package_id=java_response["contextPackageId"],
+            payload=publish_response,
+        )
+
+        delete_generated_context_files(
+            context_package_id=java_response["contextPackageId"],
+        )
+
+    except Exception as error:
+        java_response = update_context_package_status(
+            base_url=current_app.config["JAVA_CATALOGUE_BASE_URL"],
+            context_package_id=java_response["contextPackageId"],
+            payload={
+                "status": "FAILED",
+                "geoserverLayerName": None,
+                "geoserverWmsUrl": None,
+                "errorMessage": str(error),
+            },
+        )
 
     return render_template(
-            "context_import_status.html",
-            context_import = context_import,
-            java_response = java_response
+        "context_import_status.html",
+        context_import=context_import,
+        java_response=java_response
     )
-
 
 
 @context_bp.route("/geoserver/check")
