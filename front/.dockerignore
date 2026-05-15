@@ -1,0 +1,11 @@
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.git
+generated/*
+build
+*.log
+there_is_a_hidden_.flaskenv
+setGeoServerPassword.sh
+showGeoServerPassword.sh

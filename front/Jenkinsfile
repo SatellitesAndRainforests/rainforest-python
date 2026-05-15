@@ -1,0 +1,81 @@
+pipeline {
+  agent any
+
+  options {
+    timestamps()
+  }
+
+  environment {
+    APP_DIR = 'front'
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Install dependencies') {
+      steps {
+        dir(env.APP_DIR) {
+          sh 'make install'
+        }
+      }
+    }
+
+    stage('Run pytest') {
+      steps {
+        dir(env.APP_DIR) {
+          sh 'make test-report'
+        }
+      }
+      post {
+        always {
+          junit allowEmptyResults: true, testResults: 'front/build/test-results/*.xml'
+        }
+      }
+    }
+
+    stage('Docker build') {
+      steps {
+        dir(env.APP_DIR) {
+          sh 'make docker-build'
+        }
+      }
+    }
+
+    stage('Container health check') {
+      steps {
+        dir(env.APP_DIR) {
+          sh 'make docker-run'
+          sh 'sleep 5'
+          sh 'make docker-health'
+        }
+      }
+      post {
+        always {
+          dir(env.APP_DIR) {
+            sh 'make docker-stop'
+          }
+        }
+      }
+    }
+
+    stage('Security placeholder') {
+      steps {
+        echo 'TODO: gitleaks secret scan'
+        echo 'TODO: trivy container scan'
+        echo 'TODO: dependency scan'
+        echo 'TODO: shellcheck'
+      }
+    }
+
+    stage('Deploy placeholder') {
+      steps {
+        echo 'TODO: terraform validate / plan / apply or OpenShift / Helm deploy later'
+      }
+    }
+  }
+}
+
